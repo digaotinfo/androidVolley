@@ -11,21 +11,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.digao.vollery.Utils.CustomJSONObjectRequest;
-import com.example.digao.vollery.Utils.CustomVolleyRequestQueue;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-//public class MainAct extends AppCompatActivity implements Response.Listener, Response.ErrorListener {
 public class MainAct extends AppCompatActivity{
     public static final String REQUEST_TAG = "MainAct";
     private TextView mTextView;
@@ -46,18 +38,14 @@ public class MainAct extends AppCompatActivity{
 
         buttonParams = (Button)findViewById(R.id.params);
 
-        final String url = "http://api.androidhive.info/volley/person_object.json";
-
+        final String url = "http://www.aplicativos.dreamhosters.com/mmgpApp/app-conteudo";
+        getStringRequest(url);
         buttonParams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getStringRequest(url);
+//                getStringRequest(url);
             }
         });
-
-
-
-
     }
 
     private void getStringRequest(String url) {
@@ -74,51 +62,17 @@ public class MainAct extends AppCompatActivity{
             public void onErrorResponse(VolleyError error) {
                     textError.setText("erro "+error.toString());
             }
-        });
+        }) {
+            @Override
+            protected Map<String, String> getParams(){
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("name", "Alif");
+                params.put("domain", "http://itsalif.info");
 
+                return params;
+            }
+        };
+        queue.add(stringRequest);//>>> ele que chama o metodo
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        mQueue = CustomVolleyRequestQueue.getInstance(this.getApplicationContext())
-//                .getRequestQueue();
-//        String url = "http://www.aplicativos.dreamhosters.com/mmgpApp/app-conteudo";
-//        final CustomJSONObjectRequest jsonRequest = new CustomJSONObjectRequest(Request.Method
-//                .POST, url,
-//                new JSONObject(), this, this);
-//        jsonRequest.setTag(REQUEST_TAG);
-//
-//        mButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mQueue.add(jsonRequest);
-//            }
-//        });
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        if (mQueue != null) {
-//            mQueue.cancelAll(REQUEST_TAG);
-//        }
-//    }
-//
-//    @Override
-//    public void onResponse(Object response) {
-//        Log.i("", "================>>>> "+response);
-//        mTextView.setText("Response is: " + response);
-//        try {
-//            mTextView.setText(mTextView.getText() + "\n\n" + ((JSONObject) response).getString
-//                    ("name"));
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Override
-//    public void onErrorResponse(VolleyError error) {
-//        mTextView.setText(error.getMessage());
-//    }
 }
