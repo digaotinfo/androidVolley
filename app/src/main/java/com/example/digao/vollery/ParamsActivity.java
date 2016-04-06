@@ -1,12 +1,9 @@
 package com.example.digao.vollery;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
+import android.widget.*;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,50 +16,44 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ParamsActivity extends AppCompatActivity {
-    RequestQueue queue = Volley.newRequestQueue(this);
+    final String url = "http://www.aplicativos.dreamhosters.com/mmgpApp/app-conteudo";
+
+    private TextView textOk;
+    private TextView textError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.params_act);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Log.i("", "=======================#################3");
+        textOk = (TextView)findViewById(R.id.textOk);
+        textError = (TextView)findViewById(R.id.textError);
 
-        String url = "http://www.aplicativos.dreamhosters.com/mmgpApp/app-categorias";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>()
-                {
+        Intent intent = getIntent();
+        String myValue = intent.getStringExtra("parametro");
+
+
+        textOk.setText(myValue);
+//        getStringRequest(url);
+    }
+
+    private void getStringRequest(String url) {
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response);
+                        textOk.setText("OK ======>>>> "+response);
                     }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        String response = null;
-                        Log.d("Error.Response", response);
-                    }
-                }
-        ) {
+                }, new Response.ErrorListener() {
             @Override
-            protected Map<String, String> getParams()
-            {
+            public void onErrorResponse(VolleyError error) {
+                textError.setText("erro "+error.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams(){
                 Map<String, String>  params = new HashMap<String, String>();
                 params.put("name", "Alif");
                 params.put("domain", "http://itsalif.info");
@@ -70,9 +61,8 @@ public class ParamsActivity extends AppCompatActivity {
                 return params;
             }
         };
-        queue.add(postRequest);
-
-
+        queue.add(stringRequest);//>>> ele que chama o metodo
     }
+
 
 }

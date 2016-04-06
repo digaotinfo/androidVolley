@@ -1,6 +1,7 @@
 package com.example.digao.vollery;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ public class MainAct extends AppCompatActivity{
     private Button buttonParams;
     private TextView textOk;
     private TextView textError;
+    private Button listVolley;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +36,37 @@ public class MainAct extends AppCompatActivity{
         textOk = (TextView)findViewById(R.id.textOk);
         textError = (TextView)findViewById(R.id.textError);
         mTextView = (TextView) findViewById(R.id.textView);
-        mButton = (Button) findViewById(R.id.button);
 
+        mButton = (Button) findViewById(R.id.button);
         buttonParams = (Button)findViewById(R.id.params);
+        listVolley = (Button)findViewById(R.id.listVolley);
 
         final String url = "http://www.aplicativos.dreamhosters.com/mmgpApp/app-conteudo";
         getStringRequest(url);
-        buttonParams.setOnClickListener(new View.OnClickListener() {
+        mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                getStringRequest(url);
             }
         });
+
+        buttonParams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainAct.this, ParamsActivity.class);
+                intent.putExtra("parametro", "valor");
+                startActivity(intent);
+            }
+        });
+
+        listVolley.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), Itens.class);
+                startActivity(i);
+            }
+        });
+
     }
 
     private void getStringRequest(String url) {

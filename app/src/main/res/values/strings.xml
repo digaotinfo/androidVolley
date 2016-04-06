@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">vollery</string>
     <string name="title_activity_params">Params Activity</string>
+    <string name="title_activity_item">Item</string>
 </resources>

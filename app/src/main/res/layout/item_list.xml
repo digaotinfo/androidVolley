@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/item">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/image_view"
+        android:layout_width="80dp"
+        android:layout_margin="8dp"
+        android:layout_height="80dp" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/image_view"
+        android:layout_alignTop="@+id/image_view"
+        android:textSize="17dp"
+        android:text="Nome" />
+
+    <TextView
+        android:id="@+id/tv_rate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:textSize="15dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/image_view"
+        android:layout_alignTop="@+id/image_view"
+        />
+    <TextView
+        android:id="@+id/tv_genre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_rate"
+        android:textSize="13dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/image_view"
+        android:layout_alignTop="@+id/image_view"
+        />
+    <TextView
+        android:id="@+id/tv_year"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_genre"
+        android:textSize="13dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/image_view"
+        android:layout_alignTop="@+id/image_view"
+        />
+</LinearLayout>
