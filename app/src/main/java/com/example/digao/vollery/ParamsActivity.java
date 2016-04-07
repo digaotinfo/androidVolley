@@ -1,8 +1,10 @@
 package com.example.digao.vollery;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.*;
 
 import com.android.volley.Request;
@@ -12,7 +14,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ParamsActivity extends AppCompatActivity {
@@ -30,10 +42,37 @@ public class ParamsActivity extends AppCompatActivity {
         textError = (TextView)findViewById(R.id.textError);
 
         Intent intent = getIntent();
-        String myValue = intent.getStringExtra("parametro");
+        String myValue = intent.getStringExtra("file");
 
 
-        textOk.setText(myValue);
+        // Reading text file from assets folder
+        String json = null;
+        try {
+            InputStream is = getAssets().open("conteudo.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+//            return null;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        textOk.setText(json);
 //        getStringRequest(url);
     }
 

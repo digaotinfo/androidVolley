@@ -1,7 +1,9 @@
 package com.example.digao.vollery;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +40,46 @@ public class MainAct extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_act);
+
+
+        ///////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+//        String fileName = "MeuArquivo.json";
+//        String content = "Olá todos?";
+//
+//        FileOutputStream outputStream = null;
+//        try {
+//            outputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
+//            outputStream.write(content.getBytes());
+//            outputStream.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         textOk = (TextView)findViewById(R.id.textOk);
         textError = (TextView)findViewById(R.id.textError);
@@ -54,7 +102,7 @@ public class MainAct extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainAct.this, ParamsActivity.class);
-                intent.putExtra("parametro", "valor");
+                intent.putExtra("file", "conteudo.json");
                 startActivity(intent);
             }
         });
@@ -77,6 +125,18 @@ public class MainAct extends AppCompatActivity{
                     @Override
                     public void onResponse(String response) {
                         textOk.setText("OK ======>>>> "+response);
+
+                        String fileName = "conteudo.json";
+                        String content = response;
+
+                        FileOutputStream outputStream = null;
+                        try {
+                            outputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
+                            outputStream.write(content.getBytes());
+                            outputStream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
