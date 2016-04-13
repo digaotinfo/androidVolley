@@ -56,7 +56,7 @@ public class Itens extends AppCompatActivity {
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public String onResponse(JSONArray response) {
                 hideDialog();
                 ///////// parsing
                 for (int i=0; i<response.length(); i++){
@@ -87,11 +87,13 @@ public class Itens extends AppCompatActivity {
                     }
                 }
                 adapter.notifyDataSetChanged();
+                return null;
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public String onErrorResponse(VolleyError error) {
 
+                return null;
             }
         });
 

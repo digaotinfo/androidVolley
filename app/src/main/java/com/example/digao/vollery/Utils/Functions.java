@@ -1,11 +1,8 @@
-package com.example.digao.vollery;
+package com.example.digao.vollery.Utils;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.*;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,57 +12,72 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParamsActivity extends AppCompatActivity {
-    final String url = "http://www.aplicativos.dreamhosters.com/mmgpApp/app-conteudo";
+/**
+ * Created by digao on 12/04/16.
+ */
+public class Functions {
+    Context mContext;
 
-    private TextView textOk;
-    private TextView textError;
+    public Functions(Context context) {
+        mContext = context;
+    }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.params_act);
-
-        textOk = (TextView)findViewById(R.id.textOk);
-        textError = (TextView)findViewById(R.id.textError);
-
-        Intent intent = getIntent();
-
+    public String read(){
         String eol = System.getProperty("line.separator");
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(openFileInput("conteudo.json")));){
+        String retorno;
+        try (BufferedReader input = new BufferedReader(new InputStreamReader(mContext.openFileInput("conteudo.json")));){
             String line;
             StringBuffer buffer = new StringBuffer();
             while ((line = input.readLine()) != null) {
                 buffer.append(line + eol);
             }
+            retorno = buffer.toString();
         } catch (Exception e) {
             // we do not care
+            retorno = e.getMessage();
         }
-
-
-//        textOk.setText(json);
+        return retorno;
     }
 
-    private void getStringRequest(String url) {
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+    public void writeFile(String response){
+        String fileName = "conteudo.json";
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+            outputStream.write(response.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+    public void consultaWebservice(String urlConteudo){
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlConteudo,
                 new Response.Listener<String>() {
                     @Override
                     public String onResponse(String response) {
-                        textOk.setText("OK ======>>>> "+response);
+                        writeFile(response);
+
                         return response;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public String onErrorResponse(VolleyError error) {
-                textError.setText("erro "+error.toString());
-                return null;
+
+                return "erro "+error.toString();
             }
         }) {
             @Override
@@ -79,6 +91,5 @@ public class ParamsActivity extends AppCompatActivity {
         };
         queue.add(stringRequest);//>>> ele que chama o metodo
     }
-
 
 }

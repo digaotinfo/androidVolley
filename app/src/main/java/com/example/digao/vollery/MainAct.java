@@ -1,31 +1,14 @@
 package com.example.digao.vollery;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.example.digao.vollery.Utils.Constantes;
+import com.example.digao.vollery.Utils.Functions;
 
 public class MainAct extends AppCompatActivity{
     public static final String REQUEST_TAG = "MainAct";
@@ -35,51 +18,13 @@ public class MainAct extends AppCompatActivity{
     private TextView textOk;
     private TextView textError;
     private Button listVolley;
+    public Object retorno;
+    Functions functions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_act);
-
-
-        ///////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////
-//        String fileName = "MeuArquivo.json";
-//        String content = "Olá todos?";
-//
-//        FileOutputStream outputStream = null;
-//        try {
-//            outputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
-//            outputStream.write(content.getBytes());
-//            outputStream.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
-        ///////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         textOk = (TextView)findViewById(R.id.textOk);
         textError = (TextView)findViewById(R.id.textError);
@@ -89,12 +34,19 @@ public class MainAct extends AppCompatActivity{
         buttonParams = (Button)findViewById(R.id.params);
         listVolley = (Button)findViewById(R.id.listVolley);
 
-        final String url = "http://www.aplicativos.dreamhosters.com/mmgpApp/app-conteudo";
-        getStringRequest(url);
+
+
+
+
+        functions = new Functions(getApplicationContext());
+        functions.consultaWebservice(Constantes.urlConteudo);
+
+        String lendoJSON = functions.read();
+        textOk.setText("OK JSON LOCAL ======>>>> "+lendoJSON);
+
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                getStringRequest(url);
             }
         });
 
@@ -115,45 +67,6 @@ public class MainAct extends AppCompatActivity{
             }
         });
 
-    }
-
-    private void getStringRequest(String url) {
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        textOk.setText("OK ======>>>> "+response);
-
-                        String fileName = "conteudo.json";
-                        String content = response;
-
-                        FileOutputStream outputStream = null;
-                        try {
-                            outputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
-                            outputStream.write(content.getBytes());
-                            outputStream.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                    textError.setText("erro "+error.toString());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams(){
-                Map<String, String>  params = new HashMap<String, String>();
-                params.put("name", "Alif");
-                params.put("domain", "http://itsalif.info");
-
-                return params;
-            }
-        };
-        queue.add(stringRequest);//>>> ele que chama o metodo
     }
 
 }
