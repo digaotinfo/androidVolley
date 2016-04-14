@@ -1,5 +1,6 @@
 package com.example.digao.vollery;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,12 @@ import android.widget.*;
 
 import com.example.digao.vollery.Utils.Constantes;
 import com.example.digao.vollery.Utils.Functions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainAct extends AppCompatActivity{
     public static final String REQUEST_TAG = "MainAct";
@@ -20,6 +27,7 @@ public class MainAct extends AppCompatActivity{
     private Button listVolley;
     public Object retorno;
     Functions functions;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +43,41 @@ public class MainAct extends AppCompatActivity{
         listVolley = (Button)findViewById(R.id.listVolley);
 
 
-
-
+        progress = ProgressDialog.show(this, "",
+                "Aguarde...", true);
 
         functions = new Functions(getApplicationContext());
-        functions.consultaWebservice(Constantes.urlConteudo);
 
-        String lendoJSON = functions.read();
-        textOk.setText("OK JSON LOCAL ======>>>> "+lendoJSON);
+
+
+        /////////////////////////////////////////////////////////////
+        // SALVAR CONTENT LOCAL MANDANDO PARAMETERS >>>
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("k", "BC654654FASDFAS5465465");
+        params.put("teste", "teste de parametro");
+        functions.consultaWebservice(Constantes.urlConteudo, "conteudo", params);
+        // <<< SALVAR CONTENT LOCAL MANDANDO PARAMETERS
+        /////////////////////////////////////////////////////////////
+
+
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    @Override
+                    public void run() {
+
+                        String lendoJSON = functions.read("conteudo");
+                        textOk.setText("OK JSON LOCAL ======>>>> "+lendoJSON);
+
+                        progress.dismiss();
+
+                    }
+                },
+                300);
+
+
+
+
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override

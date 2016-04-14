@@ -1,8 +1,11 @@
 package com.example.digao.vollery.Utils;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,27 +14,32 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by digao on 12/04/16.
  */
 public class Functions {
     Context mContext;
-
+    ;
     public Functions(Context context) {
         mContext = context;
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public String read(){
+    public String read(String conteudo){
         String eol = System.getProperty("line.separator");
         String retorno;
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(mContext.openFileInput("conteudo.json")));){
+        try (BufferedReader input = new BufferedReader(new InputStreamReader(mContext.openFileInput(conteudo+".json")));){
             String line;
             StringBuffer buffer = new StringBuffer();
             while ((line = input.readLine()) != null) {
@@ -39,15 +47,14 @@ public class Functions {
             }
             retorno = buffer.toString();
         } catch (Exception e) {
-            // we do not care
             retorno = e.getMessage();
         }
         return retorno;
     }
 
 
-    public void writeFile(String response){
-        String fileName = "conteudo.json";
+    public void writeFile(String response, String jsonName){
+        String fileName = jsonName+".json";
         FileOutputStream outputStream = null;
         try {
             outputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
@@ -59,37 +66,30 @@ public class Functions {
     }
 
 
-
-
-
-    public void consultaWebservice(String urlConteudo){
+    public void consultaWebservice(String urlConteudo, final String jsonName, final Map<String, String> params){
         RequestQueue queue = Volley.newRequestQueue(mContext);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlConteudo,
                 new Response.Listener<String>() {
                     @Override
                     public String onResponse(String response) {
-                        writeFile(response);
+                        writeFile(response, jsonName);
 
                         return response;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public String onErrorResponse(VolleyError error) {
-
                 return "erro "+error.toString();
             }
         }) {
             @Override
             protected Map<String, String> getParams(){
-                Map<String, String>  params = new HashMap<String, String>();
-                params.put("name", "Alif");
-                params.put("domain", "http://itsalif.info");
-
-                return params;
+                return (Map<String, String>) params;
             }
         };
         queue.add(stringRequest);//>>> ele que chama o metodo
     }
+
 
 }
